@@ -37,11 +37,7 @@ $m$ を正の整数とし、$n=3m$ とする。座標平面上の $n^2$ 個の�
 
 ## 第4問（やや難）
 
-1 辺の長さが 1 の正四面体 OABC がある。辺 OA, OB, OC 上(端点 O を除く)にそれぞれ点 P, Q, R を、OP $=p$, OQ $=q$, OR $=r$ となるようにとる。また $\overrightarrow{\mathrm{OG}}=\dfrac14\left(\overrightarrow{\mathrm{OA}}+\overrightarrow{\mathrm{OB}}+\overrightarrow{\mathrm{OC}}\right)$ で定まる点 G(正四面体の重心)をとる。
-
-(1) 平面 PQR が G を通るための条件は $\dfrac1p+\dfrac1q+\dfrac1r=4$ であることを示せ。
-
-(2) 平面 PQR が G を通るとき、四面体 OPQR の体積の取りうる値の範囲を求めよ。
+1 辺の長さが 1 の正四面体 OABC がある。辺 OA, OB, OC 上(端点 O を除く)にそれぞれ点 P, Q, R を、OP $=p$, OQ $=q$, OR $=r$ となるようにとる。また $\overrightarrow{\mathrm{OG}}=\dfrac14\left(\overrightarrow{\mathrm{OA}}+\overrightarrow{\mathrm{OB}}+\overrightarrow{\mathrm{OC}}\right)$ で定まる点 G(正四面体の重心)をとる。平面 PQR が G を通るとき、四面体 OPQR の体積の取りうる値の範囲を求めよ。
 
 @@解答@@
 
@@ -79,11 +75,11 @@ $m$ を正の整数とし、$n=3m$ とする。座標平面上の $n^2$ 個の�
 
 ## 第4問
 
-**答え** (2) $\dfrac{9\sqrt2}{256}\le V\le\dfrac{\sqrt2}{24}$
+**答え** $\dfrac{9\sqrt2}{256}\le V\le\dfrac{\sqrt2}{24}$
 **骨子**
-1. (1) $\overrightarrow{\mathrm{OG}}=\frac1{4p}\overrightarrow{\mathrm{OP}}+\frac1{4q}\overrightarrow{\mathrm{OQ}}+\frac1{4r}\overrightarrow{\mathrm{OR}}$。G が平面 PQR 上 ⇔ 係数の和が 1。
-2. (2) $V=pqr\cdot\frac{\sqrt2}{12}$。$x=\frac1p$ などとおくと $x+y+z=4$、$1\le x,y,z\le2$($p,q,r\le1$ から)。
+1. まず「G が平面 PQR 上にある」条件を $p,q,r$ の式にする。$\overrightarrow{\mathrm{OG}}=\frac1{4p}\overrightarrow{\mathrm{OP}}+\frac1{4q}\overrightarrow{\mathrm{OQ}}+\frac1{4r}\overrightarrow{\mathrm{OR}}$。G が平面 PQR 上 ⇔ 係数の和が 1、つまり $\frac1p+\frac1q+\frac1r=4$。
+2. $V=pqr\cdot\frac{\sqrt2}{12}$。$x=\frac1p$ などとおくと $x+y+z=4$、$1\le x,y,z\le2$($p,q,r\le1$ から)。
 3. 最小: 相加平均と相乗平均から $xyz\le\left(\frac43\right)^3$、$pqr\ge\frac{27}{64}$($p=q=r=\frac34$)。
 4. 最大: $z$ を固定すると $xy\ge1\cdot(3-z)$($x+y=4-z$、$x,y\ge1$ なので、片方が 1 のとき最小)。$z(3-z)\ge2\ (1\le z\le2)$ から $xyz\ge2$、$pqr\le\frac12$($(p,q,r)=(1,1,\frac12)$ など)。
 
-**ねらい** 空間ベクトルの「平面上にある条件」と、端点つきの最大・最小。最大は相加平均と相乗平均の関係では出ず、端で起こることに気づくのが山場。
+**ねらい** 一問完結型。条件を式にする段階(平面上にある条件)から自分で組み立てる。最大は相加平均と相乗平均の関係では出ず、端で起こることに気づくのが山場。

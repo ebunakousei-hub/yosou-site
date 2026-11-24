@@ -19,11 +19,11 @@ $n\ge3$ とし、1 から $n$ までの整数が 1 つずつ書かれた $n$ 枚
 
 ## 第3問（標準+）
 
-座標空間内の $xy$ 平面上の円 $x^2+y^2=1$ を $L$ とする。中心が $L$ 上を動く半径 $r$ の球(内部を含む)が通過する範囲の体積を $V(r)$ とする。
+座標空間に 2 点 A$(0,0,1)$, B$(0,0,3)$ をとり、$xy$ 平面上の点 P を考える。
 
-(1) $V\!\left(\frac12\right)$ を求めよ。
+(1) P と原点の距離を $r$ とする。$\tan\angle\mathrm{APB}$ を $r$ で表し、$\angle\mathrm{APB}$ の最大値を求めよ。
 
-(2) $V(2)$ を求めよ。
+(2) $\overrightarrow{\mathrm{PA}}\cdot\overrightarrow{\mathrm{PB}}\le\dfrac2{\sqrt5}\,|\overrightarrow{\mathrm{PA}}|\,|\overrightarrow{\mathrm{PB}}|$ を満たす点 P の範囲を図示し、その面積を求めよ。
 
 ## 第4問（標準+）
 
@@ -67,9 +67,11 @@ $a$ を正の実数とする。
 
 ## 第3問
 
-**答え** (1) $\dfrac{\pi^2}2$ (2) $V(2)=6\sqrt3\pi+\dfrac{16}3\pi^2$
+**答え** (1) $\tan\angle\mathrm{APB}=\dfrac{2r}{r^2+3}$、最大値 $\dfrac\pi6$($r=\sqrt3$ のとき) (2) 原点を中心とする半径 1 と半径 3 の円にはさまれた部分(境界を含む)、面積 $8\pi$
 
-**骨子** 高さ $h$ の断面は、半径 $1\pm\rho$($\rho=\sqrt{r^2-h^2}$)の円環。$\rho>1$ になると内側の穴がふさがって円板になる(自己交差)。(2) は $|h|\le\sqrt3$(円板、面積 $\pi(1+\rho)^2$)と $|h|\ge\sqrt3$(円環、面積 $4\pi\rho$)に分ける。
+**骨子** (1) $\angle\mathrm{APB}=\angle\mathrm{OPB}-\angle\mathrm{OPA}$ で、$\tan\angle\mathrm{OPB}=\frac3r$、$\tan\angle\mathrm{OPA}=\frac1r$。加法定理で $\frac{2r}{r^2+3}$。相加平均と相乗平均の関係から $r+\frac3r\ge2\sqrt3$ で、$\tan\le\frac1{\sqrt3}$。(2) 条件は $\cos\angle\mathrm{APB}\le\frac2{\sqrt5}$、つまり $\tan\angle\mathrm{APB}\ge\frac12$($\angle\mathrm{APB}$ は鋭角)。$\frac{2r}{r^2+3}\ge\frac12\iff r^2-4r+3\le0\iff1\le r\le3$。
+
+**ねらい** 空間ベクトルの内積の条件を角の条件に言いかえる。P が $z$ 軸のまわりに対称に動くので、原点からの距離 $r$ だけの問題に落ちる。
 
 ## 第4問
 

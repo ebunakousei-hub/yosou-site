@@ -7,9 +7,7 @@ order = 12
 
 ## 第1問（やや難）
 
-(1) $n$ を正の整数、$k$ を 0 以上の整数とする。$\displaystyle\int_{k\pi/n}^{(k+1)\pi/n}|\sin nx|\,dx$ を求めよ。
-
-(2) 極限 $\displaystyle\lim_{n\to\infty}\int_0^\pi\frac{|\sin nx|}{1+x}\,dx$ を求めよ。
+$n$ を正の整数とする。極限 $\displaystyle\lim_{n\to\infty}\int_0^\pi\frac{|\sin nx|}{1+x}\,dx$ を求めよ。
 
 ## 第2問（難）
 
@@ -23,11 +21,13 @@ $n$ を 2 以上の整数とする。1 個のさいころを $n$ 回投げる。
 
 ## 第3問（やや難）
 
-座標空間内に、頂点が $(0,0,\sqrt3)$ で、底面が $xy$ 平面上の円板 $x^2+y^2\le1$ である円錐 $K$ がある。
+座標空間で、原点 O を中心とする半径 1 の球面を $S$ とし、実数 $\theta,\varphi$ に対して $S$ 上の点 $\mathrm P(\theta,\varphi)=(\cos\theta\cos\varphi,\ \cos\theta\sin\varphi,\ \sin\theta)$ を考える。$0<\alpha<\frac\pi2$、$0<\beta<\pi$ として、A $=\mathrm P(\alpha,0)$、B $=\mathrm P(\alpha,\beta)$ とおく。
 
-(1) $-1\le c\le1$ とする。平面 $x=c$ による $K$ の切り口の点と $x$ 軸との距離の最大値を $R(c)$ とする。$R(c)$ を求めよ。
+(1) $\angle\mathrm{AOB}=\gamma$ とする。$\cos\gamma$ を $\alpha,\beta$ で表せ。
 
-(2) $K$ を $x$ 軸のまわりに 1 回転させてできる立体の体積を求めよ。
+(2) 3 点 O, A, B を通る平面と $S$ の交わりの円のうち、A と B を結ぶ短い方の弧を $C$ とする。$C$ 上の点の $z$ 座標の最大値を $\alpha,\beta$ で表せ。
+
+(3) $\alpha=\frac\pi4$、$\beta=\frac\pi2$ のとき、弧 $C$ の長さと、$S$ 上で $z$ 座標が $\sin\alpha$ である円(緯線)に沿って A から B まで行く短い方の弧の長さを比べよ。
 
 ## 第4問（難）
 
@@ -69,13 +69,13 @@ $n$ を 2 以上の整数とする。1 個のさいころを $n$ 回投げる。
 
 ## 第1問
 
-**答え** (1) $\dfrac2n$ (2) $\dfrac2\pi\log(1+\pi)$
+**答え** $\dfrac2\pi\log(1+\pi)$
 **骨子**
-1. (2) $[0,\pi]$ を $n$ 等分した各区間で、$\frac1{1+x}$ を区間の両端の値ではさむ。(1) から
+1. $[0,\pi]$ を $n$ 等分すると、各区間 $\left[\frac{k\pi}n,\frac{(k+1)\pi}n\right]$ で $\int|\sin nx|\,dx=\frac2n$。各区間で $\frac1{1+x}$ を区間の両端の値ではさむと
    $\frac2n\sum_{k=1}^{n}\frac1{1+k\pi/n}\le\int_0^\pi\frac{|\sin nx|}{1+x}dx\le\frac2n\sum_{k=0}^{n-1}\frac1{1+k\pi/n}$。
 2. 区分求積で、両辺とも $\frac2\pi\int_0^\pi\frac{dx}{1+x}$ に収束する。
 
-**ねらい** 評価して区分求積に持ちこむ型(2023年度理1)。「$|\sin nx|$ の平均は $\frac2\pi$」という見方ができるか。
+**ねらい** 一問完結型。評価して区分求積に持ちこむ型(2023年度理1)で、「$|\sin nx|$ の 1 周期分ずつに区切る」ことを自分で思いつく必要がある。「$|\sin nx|$ の平均は $\frac2\pi$」という見方ができるか。
 
 ## 第2問
 
@@ -91,13 +91,13 @@ $n$ を 2 以上の整数とする。1 個のさいころを $n$ 回投げる。
 
 ## 第3問
 
-**答え** (1) $|c|\le\frac12$ のとき $R(c)=\sqrt3(1-|c|)$、$\frac12\le|c|\le1$ のとき $R(c)=\sqrt{1-c^2}$ (2) $\dfrac{13}6\pi$
+**答え** (1) $\cos\gamma=\cos^2\alpha\cos\beta+\sin^2\alpha$ (2) $\dfrac{\sin\alpha}{\sqrt{1-\cos^2\alpha\sin^2\frac\beta2}}$ (3) 弧 $C$ の長さは $\dfrac\pi3$、緯線に沿った弧の長さは $\dfrac{\sqrt2}4\pi$ で、弧 $C$ のほうが短い
 **骨子**
-1. 切り口の点は $(c,y,z)$ で $\sqrt{c^2+y^2}\le1-\frac z{\sqrt3}$。$x$ 軸との距離の 2 乗 $y^2+z^2$ は、境界上で $v=\sqrt{c^2+y^2}\in[|c|,1]$ を使うと $v^2-c^2+3(1-v)^2$ で、$v$ の下に凸な 2 次関数。最大は端点 $v=|c|$(頂点側)か $v=1$(底面の縁)。
-2. 2 つを比べると、$3(1-|c|)^2\ge1-c^2\iff|c|\le\frac12$。切り口は $x$ 軸上の点 $(c,0,0)$ を含むので、回転した断面は円板。
-3. $V=2\pi\left[\int_0^{1/2}3(1-c)^2dc+\int_{1/2}^1(1-c^2)dc\right]$。
+1. (1) $\cos\gamma=\overrightarrow{\mathrm{OA}}\cdot\overrightarrow{\mathrm{OB}}$ を成分で計算する。
+2. (2) 弧 $C$ は A, B の中点の方向について対称なので、$z$ 座標が最大になるのは弧の中点 $\frac{\overrightarrow{\mathrm{OA}}+\overrightarrow{\mathrm{OB}}}{|\overrightarrow{\mathrm{OA}}+\overrightarrow{\mathrm{OB}}|}$(**弧の上の点を $\cos$ と $\sin$ でパラメータ表示して、最大を確かめる**)。$|\overrightarrow{\mathrm{OA}}+\overrightarrow{\mathrm{OB}}|^2=2+2\cos\gamma$ と半角の公式で整理する。
+3. (3) $\cos\gamma=\frac12\cdot0+\frac12=\frac12$ から $\gamma=\frac\pi3$。緯線の半径は $\cos\frac\pi4$ で、中心角 $\frac\pi2$ の弧の長さは $\frac{\sqrt2}4\pi$。$\frac\pi3<\frac{\sqrt2}4\pi$ は $4<3\sqrt2$ と同値。最高点の $z$ 座標は $\frac{\sqrt6}3$ で、A, B の $z$ 座標 $\frac{\sqrt2}2$ より高い(大円の航路は極の側にふくらむ)。
 
-**ねらい** 断面の「軸から最も遠い点」がどこかで入れかわる場合分け。頂点の高さを 1 にすると立体がちょうど単位球になる(特別な場合の検算)。
+**ねらい** 球面上の動点を、緯度・経度(三角関数)と内積で扱う。2 点を結ぶ最短の道(大円の弧)が緯線より極の側を通ることを、計算で確かめる。
 
 ## 第4問
 
