@@ -187,6 +187,7 @@ fn page(title: &str, depth_prefix: &str, main: &str, seo: &Seo) -> String {
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' https://cdn.jsdelivr.net; script-src 'self' https://cdn.jsdelivr.net; font-src https://cdn.jsdelivr.net; img-src 'self' data:; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#1f4e8c">
+<meta name="google-site-verification" content="io-t3XTjl84jCqitU8efk720dZ0Vqz74OxqG7ggCUs4">
 <title>{title}</title>
 {head_seo}<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231f4e8c'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' fill='white' font-family='serif'%3E%E2%88%AB%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
