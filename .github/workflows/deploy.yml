@@ -15,6 +15,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # sitemap.xml の lastmod / 構造化データの dateModified に、ファイルごとの最終コミット日を使うため
+          fetch-depth: 0
       - uses: dtolnay/rust-toolchain@stable
       - name: Build site
         env:

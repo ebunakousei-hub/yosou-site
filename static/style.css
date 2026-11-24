@@ -25,4 +25,7 @@ article h2 { font-size:1.15rem; border-left:4px solid var(--accent); padding-lef
 ul.sets { list-style:none; padding:0; margin:.4rem 0 0; }
 .setrow { display:flex; flex-wrap:wrap; align-items:baseline; gap:.2rem 1.2rem; padding:.45rem .2rem; border-bottom:1px solid #e3e3dc; }
 .setname { font-weight:700; min-width:11.5rem; }
+.setname .axis { display:block; font-weight:400; font-size:.8rem; color:#666; }
+.intro { color:#333; font-size:.95rem; }
+.intro p { margin:.4rem 0; }
 .setlinks { display:flex; flex-wrap:wrap; gap:.2rem 1.2rem; }
