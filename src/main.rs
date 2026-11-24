@@ -135,6 +135,8 @@ struct Seo {
     lastmod: Option<String>,
     /// 一覧ページに載せる子ページ（名前, パス）。構造化データの ItemList になる
     items: Vec<(String, String)>,
+    /// 構造化データの keywords（教科ごと）
+    keywords: String,
 }
 
 /// 公開URL（環境変数 SITE_URL。末尾スラッシュ無し）。未設定ならローカル用で canonical 等を出さない。
@@ -220,10 +222,11 @@ fn page(title: &str, depth_prefix: &str, main: &str, seo: &Seo) -> String {
         }
         if seo.resource {
             graph.push(format!(
-                "{{\"@type\":\"LearningResource\",\"name\":\"{}\",\"description\":\"{}\",\"url\":\"{}\",\"inLanguage\":\"ja\",\"isAccessibleForFree\":true,\"learningResourceType\":\"練習問題\",\"educationalLevel\":\"大学入試\",\"about\":\"数学\",\"keywords\":\"東大数学, 東京大学, 2027年度, 予想問題, 入試数学, 解答・解説\"{}}}",
+                "{{\"@type\":\"LearningResource\",\"name\":\"{}\",\"description\":\"{}\",\"url\":\"{}\",\"inLanguage\":\"ja\",\"isAccessibleForFree\":true,\"learningResourceType\":\"練習問題\",\"educationalLevel\":\"大学入試\",\"about\":\"数学\",\"keywords\":\"{}\"{}}}",
                 json_esc(title),
                 json_esc(&seo.desc),
                 json_esc(&url),
+                json_esc(if seo.keywords.is_empty() { "2027年度, 予想問題, 入試数学, 解答・解説" } else { &seo.keywords }),
                 seo.lastmod.as_ref().map(|d| format!(",\"dateModified\":\"{}\"", json_esc(d))).unwrap_or_default()
             ));
         }
@@ -305,6 +308,15 @@ struct SubjectMeta {
     /// 一覧ページの冒頭に載せる説明（Markdown）
     #[serde(default)]
     intro: String,
+    /// 試験の区分と時間（例: "文科（100分）・理科（150分）"）
+    #[serde(default)]
+    courses: String,
+    /// 区分の呼び方（例: "文科・理科"、"文系・理系"）
+    #[serde(default)]
+    course_pair: String,
+    /// 構造化データの keywords
+    #[serde(default)]
+    tags: String,
 }
 
 struct Subject {
@@ -422,6 +434,7 @@ fn main() -> Result<(), String> {
                 resource: true,
                 lastmod: p.lastmod.clone(),
                 items: Vec::new(),
+                keywords: s.meta.tags.clone(),
             };
             let html = page(&format!("{}｜{}予想問題", p.meta.title, kw), "../", &main, &seo);
             fs::write(dist.join(&path), html).map_err(|e| e.to_string())?;
@@ -447,6 +460,7 @@ fn main() -> Result<(), String> {
                     resource: true,
                     lastmod: p.lastmod.clone(),
                     items: Vec::new(),
+                    keywords: s.meta.tags.clone(),
                 };
                 let html = page(&format!("{} 解答・解説｜{}予想問題", p.meta.title, kw), "../", &main, &seo);
                 fs::write(dist.join(&apath), html).map_err(|e| e.to_string())?;
@@ -472,7 +486,7 @@ fn main() -> Result<(), String> {
             for p in s.problems.iter().filter(|p| p.meta.level == lv) {
                 let key = p.slug.rsplit_once('-').map(|x| x.0).unwrap_or(&p.slug).to_string();
                 let title = p.meta.title.as_str();
-                let split = title.find(" 文科").or_else(|| title.find(" 理科"));
+                let split = [" 文科", " 理科", " 文系", " 理系"].iter().find_map(|c| title.find(c));
                 let (set_name, course) = match split {
                     Some(i) => (&title[..i], &title[i + 1..]),
                     None => (title, title),
@@ -500,16 +514,32 @@ fn main() -> Result<(), String> {
         let spath = format!("{}/", s.slug);
         let nsets = list_items.len();
         let seo = Seo {
-            desc: format!("{}。易化した場合・難化した場合の予想問題{}本を、文科（100分）・理科（150分）ごとに解答・解説付きで無料公開。", s.meta.desc, nsets),
+            desc: format!(
+                "{}。易化した場合・難化した場合の予想問題{}本を、{}ごとに解答・解説付きで無料公開。",
+                s.meta.desc,
+                nsets,
+                if s.meta.courses.is_empty() { "文理" } else { &s.meta.courses }
+            ),
             path: spath.clone(),
             crumbs: subject_crumbs.clone(),
             resource: false,
             lastmod: site_last.clone(),
             items: list_items,
+            keywords: s.meta.tags.clone(),
         };
         fs::write(
             sdir.join("index.html"),
-            page(&format!("{} 予想問題一覧（易化・難化／文科・理科）| {}", kw, SITE_TITLE), "../", &main, &seo),
+            page(
+                &format!(
+                    "{} 予想問題一覧（易化・難化／{}）| {}",
+                    kw,
+                    if s.meta.course_pair.is_empty() { "文理" } else { &s.meta.course_pair },
+                    SITE_TITLE
+                ),
+                "../",
+                &main,
+                &seo,
+            ),
         )
         .map_err(|e| e.to_string())?;
         urls.push((spath, site_last.clone()));
@@ -517,7 +547,7 @@ fn main() -> Result<(), String> {
 
     // トップ：教科選択
     let mut main = String::from(
-        "<h1>国公立大 予想問題</h1>\n<p>国公立大学の入試予想問題を無料で公開しています。現在は<strong>東京大学 前期日程の数学（2027年度）</strong>の予想問題を、易化した場合・難化した場合に分けて、文科・理科それぞれ解答・解説付きで掲載しています。過去10年分の出題を分析し、新課程の範囲（統計的な推測など）も含めて作成しています。</p>\n<ul class=\"subjects\">\n",
+        "<h1>国公立大 予想問題</h1>\n<p>国公立大学の入試予想問題を無料で公開しています。現在は<strong>東京大学・京都大学 前期日程の数学（2027年度）</strong>の予想問題を、易化した場合・難化した場合に分けて、文系・理系それぞれ解答・解説付きで掲載しています。各大学の過去問を分析し、2027年度の出題範囲に合わせて作成しています。</p>\n<ul class=\"subjects\">\n",
     );
     for s in &subjects {
         main.push_str(&format!(
@@ -531,7 +561,7 @@ fn main() -> Result<(), String> {
     let subj_names: Vec<&str> = subjects.iter().map(|s| s.meta.name.as_str()).collect();
     let seo = Seo {
         desc: format!(
-            "国公立大学の入試予想問題を無料公開。東大数学（{}）2027年度の予想問題を、易化・難化の両方、文科・理科ごとに解答・解説付きで掲載。",
+            "国公立大学の入試予想問題を無料公開。{}の2027年度予想問題を、易化・難化の両方、文系・理系ごとに解答・解説付きで掲載。",
             subj_names.join("・")
         ),
         path: String::new(),
@@ -539,10 +569,11 @@ fn main() -> Result<(), String> {
         resource: false,
         lastmod: site_last.clone(),
         items: Vec::new(),
+        keywords: String::new(),
     };
     fs::write(
         dist.join("index.html"),
-        page(&format!("東大数学 2027年度 予想問題 無料公開（解答・解説付き）| {}", SITE_TITLE), "", &main, &seo),
+        page(&format!("{} 2027年度 予想問題 無料公開（解答・解説付き）| {}", subj_names.join("・"), SITE_TITLE), "", &main, &seo),
     )
     .map_err(|e| e.to_string())?;
 
@@ -555,6 +586,7 @@ fn main() -> Result<(), String> {
         resource: false,
         lastmod: None,
         items: Vec::new(),
+        keywords: String::new(),
     };
     let html404 = page(&format!("404 | {}", SITE_TITLE), "", &main404, &seo404)
         .replace("content=\"index,follow\"", "content=\"noindex\"");
