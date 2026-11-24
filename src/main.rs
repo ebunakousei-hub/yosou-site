@@ -121,6 +121,21 @@ fn json_esc(s: &str) -> String {
     o
 }
 
+/// 静的ファイル(style.css, render.js)の内容から作るキャッシュ回避用の版数（FNV-1a）
+fn asset_ver() -> &'static str {
+    static V: std::sync::OnceLock<String> = std::sync::OnceLock::new();
+    V.get_or_init(|| {
+        let mut h: u64 = 0xcbf29ce484222325;
+        for f in ["static/style.css", "static/render.js"] {
+            for b in fs::read(f).unwrap_or_default() {
+                h ^= b as u64;
+                h = h.wrapping_mul(0x100000001b3);
+            }
+        }
+        format!("{:08x}", h >> 32)
+    })
+}
+
 fn page(title: &str, depth_prefix: &str, main: &str, seo: &Seo) -> String {
     let mut head_seo = format!(
         "<meta name=\"description\" content=\"{d}\">\n<meta name=\"robots\" content=\"index,follow\">\n<meta property=\"og:type\" content=\"{ty}\">\n<meta property=\"og:locale\" content=\"ja_JP\">\n<meta property=\"og:site_name\" content=\"{site}\">\n<meta property=\"og:title\" content=\"{t}\">\n<meta property=\"og:description\" content=\"{d}\">\n<meta name=\"twitter:card\" content=\"summary\">\n<meta name=\"twitter:title\" content=\"{t}\">\n<meta name=\"twitter:description\" content=\"{d}\">\n",
@@ -191,11 +206,11 @@ fn page(title: &str, depth_prefix: &str, main: &str, seo: &Seo) -> String {
 <title>{title}</title>
 {head_seo}<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231f4e8c'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' fill='white' font-family='serif'%3E%E2%88%AB%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="{p}style.css">
+<link rel="stylesheet" href="{p}style.css?v={ver}">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
-<script defer src="{p}render.js"></script>
+<script defer src="{p}render.js?v={ver}"></script>
 </head>
 <body>
 <header><a href="{p}index.html">{site}</a></header>
@@ -208,6 +223,7 @@ fn page(title: &str, depth_prefix: &str, main: &str, seo: &Seo) -> String {
 "##,
         title = esc(title),
         head_seo = head_seo,
+        ver = asset_ver(),
         p = depth_prefix,
         site = esc(SITE_TITLE),
         main = main
@@ -346,15 +362,32 @@ fn main() -> Result<(), String> {
         let mut main = format!("<p class=\"crumb\"><a href=\"../index.html\">トップ</a> / {sname}</p>\n<h1>{sname} 予想問題</h1>\n");
         for (lv, desc) in [("easy", "全体的に易しくなった場合を想定"), ("hard", "全体的に難しくなった場合を想定")] {
             main.push_str(&format!(
-                "<section><h2><span class=\"tag {lv}\">{}</span></h2>\n<p class=\"desc\">{desc}</p>\n<ul>\n",
+                "<section><h2><span class=\"tag {lv}\">{}</span></h2>\n<p class=\"desc\">{desc}</p>\n<ul class=\"sets\">\n",
                 level_label(lv)
             ));
-            let mut any = false;
+            // セット（例: 易化年①）ごとに1行にまとめる。同じセットの文科・理科は slug の末尾（-arts / -sci）以外が共通。
+            let mut rows: Vec<(String, String, Vec<(String, String)>)> = Vec::new(); // (key, セット名, [(科, slug)])
             for p in s.problems.iter().filter(|p| p.meta.level == lv) {
-                any = true;
-                main.push_str(&format!("<li><a href=\"{}.html\">{}</a></li>\n", p.slug, esc(&p.meta.title)));
+                let key = p.slug.rsplit_once('-').map(|x| x.0).unwrap_or(&p.slug).to_string();
+                let title = p.meta.title.as_str();
+                let split = title.find(" 文科").or_else(|| title.find(" 理科"));
+                let (set_name, course) = match split {
+                    Some(i) => (&title[..i], &title[i + 1..]),
+                    None => (title, title),
+                };
+                match rows.last_mut() {
+                    Some(last) if last.0 == key => last.2.push((course.to_string(), p.slug.clone())),
+                    _ => rows.push((key, set_name.to_string(), vec![(course.to_string(), p.slug.clone())])),
+                }
             }
-            if !any {
+            for (_, set_name, courses) in &rows {
+                main.push_str(&format!("<li class=\"setrow\"><span class=\"setname\">{}</span><span class=\"setlinks\">", esc(set_name)));
+                for (course, slug) in courses {
+                    main.push_str(&format!("<a href=\"{}.html\">{}</a>", slug, esc(course)));
+                }
+                main.push_str("</span></li>\n");
+            }
+            if rows.is_empty() {
                 main.push_str("<li class=\"empty\">準備中</li>\n");
             }
             main.push_str("</ul></section>\n");
