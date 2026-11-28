@@ -1,175 +1,130 @@
 +++
-title = "定積分 演習①（10問）"
+title = "定積分 大問演習①（5題）"
 level = "definite"
-note = "数学の演習 ／ 定積分 演習①（軸: 計算する前に、式の形を見抜く） ／ 数学Ⅲの範囲で解ける10問"
+note = "数学の演習 ／ 定積分 大問演習①（軸: 求まらない積分を、はさんで・組にして・漸化式で決める） ／ 東大の大問 1 題分の重さ × 5題"
 order = 1
 +++
 
-**約束** すべて高校数学(数学Ⅲまで)の範囲で解ける。複素数の積分、重積分、級数展開は使わない。$\log$ は自然対数。答えに $\pi$ が出る問題は、$x=\tan\theta$ の置換で処理できる。
+**約束** どれも東大理科の大問 1 題分(25〜40 分)の重さ。高校数学(数学Ⅲまで)の範囲で解ける。複素数の積分、重積分、級数展開、逆三角関数は使わない。$\log$ は自然対数。
 
-## 問題1（標準）
+**東大 2025 理科 第2問との関係** 2025 年度の第2問は「(1) $\log x\le x-1$ を示せ、(2) $\displaystyle\lim_{n\to\infty}n\int_1^2\log\frac{1+x^{\frac1n}}2\,dx$ を求めよ」(答え $\log2-\frac12$)。**原始関数が求まらない積分を、(1) の不等式ではさんで極限を出す**問題だった。第1問・第5問はこの型、第2〜4問は「組にする」「漸化式を作る」で値そのものを決める型。
 
-定積分 $\displaystyle\int_{-1}^{1}\frac{dx}{(1+e^x)(1+x^2)}$ を求めよ。
+## 第1問（やや難）
 
-## 問題2（標準）
+(1) $t\ge0$ のとき、次の不等式を示せ。
+$$t-\frac{t^2}2\le\log(1+t)\le t-\frac{t^2}2+\frac{t^3}3$$
 
-定積分 $\displaystyle\int_0^{\pi}\frac{x\sin x}{1+\cos^2x}\,dx$ を求めよ。
+(2) 極限 $\displaystyle\lim_{n\to\infty}n\int_0^1\log\left(1+\frac{x^2}n\right)dx$ を求めよ。
 
-## 問題3（標準）
+(3) 極限 $\displaystyle\lim_{n\to\infty}n\left\{n\int_0^1\log\left(1+\frac{x^2}n\right)dx-\frac13\right\}$ を求めよ。
 
-$f(x)=x^3+x$ の逆関数を $g(x)$ とする。定積分 $\displaystyle\int_0^{10}g(x)\,dx$ を求めよ。
+## 第2問（標準）
 
-## 問題4（標準）
+(1) 定積分 $\displaystyle\int_0^{\frac\pi4}\log(1+\tan x)\,dx$ を求めよ。
 
-$n$ を正の整数とする。定積分 $\displaystyle\int_0^{n\pi}x\,|\sin x|\,dx$ を求めよ。
+(2) 定積分 $\displaystyle\int_0^1\frac{\log(1+x)}{1+x^2}\,dx$ を求めよ。
 
-## 問題5（標準）
+(3) 定積分 $\displaystyle\int_0^{\frac\pi4}\frac{x}{\cos x\,(\sin x+\cos x)}\,dx$ を求めよ。
 
-(1) 定積分 $\displaystyle\int_0^1\frac{x^4(1-x)^4}{1+x^2}\,dx$ を求めよ。
+## 第3問（やや難）
 
-(2) $\dfrac1{1260}<\dfrac{22}7-\pi<\dfrac1{630}$ を示せ。
+0 以上の整数 $n$ に対し
+$$I_n=\int_0^{\frac\pi2}\cos^nx\cos nx\,dx,\qquad J_n=\int_0^{\frac\pi2}\cos^nx\sin nx\,dx$$
+とする。
 
-## 問題6（やや難）
+(1) 正の整数 $n$ に対し、$\left(\cos^nx\sin nx\right)'$ と $\left(\cos^nx\cos nx\right)'$ を、それぞれ $\cos^{n-1}x$ と $(n+1)x$ の三角関数の積で表せ。
 
-定積分 $\displaystyle\int_{\frac12}^{2}\frac1x\sin\left(x-\frac1x\right)dx$ を求めよ。
+(2) $I_n$ を求めよ。
 
-## 問題7（やや難）
+(3) $J_n$ を求めよ。
 
-定積分 $\displaystyle\int_0^{2\pi}\frac{dx}{2+\cos x}$ を求めよ。
+## 第4問（やや難）
 
-## 問題8（やや難）
+0 以上の整数 $n$ に対し $\displaystyle J_n=\frac1{n!}\int_0^1x^ne^{-x}\,dx$ とする。
 
-定積分 $\displaystyle\int_0^1\frac{\log(1+x)}{1+x^2}\,dx$ を求めよ。
+(1) $n\ge1$ のとき、$J_n$ を $J_{n-1}$ で表せ。
 
-## 問題9（やや難）
+(2) $\displaystyle e-\sum_{k=0}^n\frac1{k!}=eJ_n$ を示せ。さらに $\displaystyle0<e-\sum_{k=0}^n\frac1{k!}<\frac e{(n+1)!}$ を示せ。
 
-0 以上の整数 $n$ に対して $I_n=\displaystyle\int_0^1(1-x^2)^n\,dx$ とする。
+(3) $e$ は無理数であることを示せ。
 
-(1) $n\ge1$ のとき、$I_n$ を $I_{n-1}$ で表せ。
+## 第5問（難）
 
-(2) 次の等式を示せ。
-$$\sum_{k=0}^{n}\frac{(-1)^k{}_n\mathrm C_k}{2k+1}=\frac{(2^n\,n!)^2}{(2n+1)!}$$
+正の整数 $n$ に対し $\displaystyle S_n=\sum_{k=1}^n\frac1{n+k}$ とする。
 
-## 問題10（難）
+(1) $a>0$、$h>0$ のとき、次の不等式を示せ。
+$$\frac{2h}{2a+h}\le\int_a^{a+h}\frac{dx}x\le\frac h2\left(\frac1a+\frac1{a+h}\right)$$
 
-0 以上の整数 $n$ に対して $J_n=\displaystyle\int_0^{\frac\pi2}\sin^nx\,dx$ とする。
+(2) $\displaystyle-\frac14\le n(S_n-\log2)\le n\log\frac{4n+1}{4n+2}$ を示せ。
 
-(1) $n\ge1$ のとき、$nJ_nJ_{n-1}=\dfrac\pi2$ を示せ。
-
-(2) $\displaystyle\lim_{n\to\infty}\sqrt n\,J_n$ を求めよ。
+(3) 極限 $\displaystyle\lim_{n\to\infty}n(S_n-\log2)$ を求めよ。
 
 @@解答@@
 
 ### 進め方の目安
 
-1 問 15〜25 分。最初の数分は手を動かさずに「この式は何と組になるか」「置換すると何が起きるか」を考える。問題1〜5 で道具をそろえ、問題6〜10 で組み合わせる。
+1 題 25〜40 分。最初の (1) はたいてい道具の準備で、(2)(3) でその道具を使う。行き詰まったら「(1) をどこに使うか」を考える。
 
-## 問題1
+| 問題 | 目安 | 型 |
+|---|---|---|
+| 第1問 | 35分 | 不等式ではさんで極限(東大 2025 理2 の型、2 段階) |
+| 第2問 | 25分 | 端から測り直す置換で自分自身と組にする |
+| 第3問 | 35分 | 微分の形から漸化式を作る |
+| 第4問 | 30分 | 漸化式で誤差を表し、評価して無理数を示す |
+| 第5問 | 40分 | 台形と中点で積分をはさみ、区分求積の誤差を出す |
 
-**答え** $\dfrac\pi4$
+## 第1問
 
-**骨子**
-1. 与式を $I$ とし、$x=-t$ と置換すると $I=\int_{-1}^1\frac{e^t}{(1+e^t)(1+t^2)}dt$。
-2. 元の式と足すと、$\frac1{1+e^x}+\frac{e^x}{1+e^x}=1$ なので $2I=\int_{-1}^1\frac{dx}{1+x^2}$。
-3. $x=\tan\theta$ とおくと $\int_{-1}^1\frac{dx}{1+x^2}=\int_{-\pi/4}^{\pi/4}d\theta=\frac\pi2$。よって $I=\frac\pi4$。
-
-**ねらい** $e^x$ の部分は原始関数が求まらない。「$x\to-x$ で対になる式と足すと消える」と見抜けるか。積分区間が原点対称なら、まずこの置換を試す。
-
-## 問題2
-
-**答え** $\dfrac{\pi^2}4$
+**答え** (1) 下の骨子 (2) $\dfrac13$ (3) $-\dfrac1{10}$
 
 **骨子**
-1. $x=\pi-t$ と置換すると $I=\int_0^\pi\frac{(\pi-t)\sin t}{1+\cos^2t}dt$。元の式と足して $2I=\pi\int_0^\pi\frac{\sin x}{1+\cos^2x}dx$。
-2. $u=\cos x$ とおくと $\int_0^\pi\frac{\sin x}{1+\cos^2x}dx=\int_{-1}^1\frac{du}{1+u^2}=\frac\pi2$(問題1 の 3)。
-3. よって $I=\frac\pi2\cdot\frac\pi2=\frac{\pi^2}4$。
+1. (1) $f(t)=\log(1+t)-t+\frac{t^2}2$ は $f'(t)=\frac{t^2}{1+t}\ge0$、$f(0)=0$ なので $f\ge0$。$g(t)=t-\frac{t^2}2+\frac{t^3}3-\log(1+t)$ は $g'(t)=\frac{t^3}{1+t}\ge0$、$g(0)=0$。
+2. (2) $t=\frac{x^2}n$ を代入して積分すると $\frac1{3n}-\frac1{10n^2}\le\int_0^1\log\left(1+\frac{x^2}n\right)dx\le\frac1{3n}-\frac1{10n^2}+\frac1{21n^3}$。$n$ 倍すると $\frac13$ にはさまれる。
+3. (3) 同じ不等式から $-\frac1{10}\le n\left\{n\int\cdots-\frac13\right\}\le-\frac1{10}+\frac1{21n}$。
 
-**ねらい** 邪魔な $x$ を「$\pi-x$ との平均」で定数 $\frac\pi2$ に置きかえる。$\sin(\pi-x)=\sin x$、$\cos^2(\pi-x)=\cos^2x$ と、式の残りが変わらないことを確かめるのが要点。
+**ねらい** $\int\log(1+x^2)\,dx$ は高校の範囲では閉じた形にならない($\tan^{-1}$ が必要)。だから**値は求めず、多項式ではさむ**。東大 2025 理2 と同じ発想を、(3) で「2 次の項まで」に進めた。どこまで細かい不等式が必要かを、(3) の極限から逆算して決めるのが本質。
 
-## 問題3
+## 第2問
 
-**答え** 14
-
-**骨子**
-1. $f(0)=0$、$f(2)=10$ で、$f$ は増加。$g(x)$ の $0\le x\le10$ のグラフは、$y=f(x)$ の $0\le x\le2$ のグラフを直線 $y=x$ で折り返したもの。
-2. 面積で考えると $\int_0^{10}g(x)\,dx+\int_0^2f(x)\,dx=2\cdot10$(縦 10・横 2 の長方形)。
-3. $\int_0^2(x^3+x)\,dx=4+2=6$ なので、答えは $20-6=14$。
-
-**ねらい** 逆関数は式で書けない(3 次方程式を解く必要がある)。それでも「図形として見れば長方形から引くだけ」と気づけるか。置換 $x=f(t)$ でも同じ結果になる。
-
-## 問題4
-
-**答え** $n^2\pi$
+**答え** (1) $\dfrac\pi8\log2$ (2) $\dfrac\pi8\log2$ (3) $\dfrac\pi8\log2$
 
 **骨子**
-1. $x=n\pi-t$ と置換すると、$|\sin(n\pi-t)|=|\sin t|$ なので $I=\int_0^{n\pi}(n\pi-t)|\sin t|\,dt$。
-2. 足して $2I=n\pi\int_0^{n\pi}|\sin x|\,dx=n\pi\cdot2n$。
-3. よって $I=n^2\pi$。
+1. (1) $x=\frac\pi4-u$ とおくと $1+\tan\left(\frac\pi4-u\right)=\frac2{1+\tan u}$。よって $I=\int_0^{\pi/4}\{\log2-\log(1+\tan u)\}du=\frac\pi4\log2-I$。
+2. (2) $x=\tan\theta$ とおくと $dx=\frac{d\theta}{\cos^2\theta}$、$1+x^2=\frac1{\cos^2\theta}$ で、(1) の積分になる。
+3. (3) $\{\log(1+\tan x)\}'=\frac1{\cos^2x(1+\tan x)}=\frac1{\cos x(\sin x+\cos x)}$。部分積分で $\left[x\log(1+\tan x)\right]_0^{\pi/4}-\int_0^{\pi/4}\log(1+\tan x)\,dx=\frac\pi4\log2-\frac\pi8\log2$。
 
-**ねらい** 問題2 と同じ「端から測り直す」置換。区間ごとに部分積分するより短い。$|\sin x|$ の周期が $\pi$ であることを使う。
+**ねらい** 3 つの見かけの違う積分が同じ値になる。(1) の「端から測り直す」置換が核で、(2) は置換で (1) に戻し、(3) は部分積分で (1) に戻す。**未知の積分を既知の積分に帰着させる経路を自分で見つける**練習。
 
-## 問題5
+## 第3問
 
-**答え** (1) $\dfrac{22}7-\pi$ (2) 下の骨子
-
-**骨子**
-1. (1) 分子を $1+x^2$ で割ると $\frac{x^4(1-x)^4}{1+x^2}=x^6-4x^5+5x^4-4x^2+4-\frac4{1+x^2}$。
-2. 積分して $\frac17-\frac23+1-\frac43+4-\pi=\frac{22}7-\pi$。
-3. (2) $0<x<1$ で $\frac12<\frac1{1+x^2}<1$ なので、(1) の積分は $\frac12\int_0^1x^4(1-x)^4dx$ と $\int_0^1x^4(1-x)^4dx=\frac1{630}$ の間にある。
-
-**ねらい** 正の関数の積分が「$\frac{22}7-\pi$」になるので、$\pi<\frac{22}7$ が証明できる。積分を「不等式を作る道具」として使う。$\int_0^1x^4(1-x)^4dx$ は展開するか、問題9 と同じ部分積分で求める。
-
-## 問題6
-
-**答え** 0
+**答え** (1) $\left(\cos^nx\sin nx\right)'=n\cos^{n-1}x\cos(n+1)x$、$\left(\cos^nx\cos nx\right)'=-n\cos^{n-1}x\sin(n+1)x$ (2) $I_n=\dfrac\pi{2^{n+1}}$ (3) $J_n=\dfrac1{2^{n+1}}\displaystyle\sum_{k=1}^n\frac{2^k}k$
 
 **骨子**
-1. $x=\frac1t$ と置換する。$dx=-\frac{dt}{t^2}$、$x:\frac12\to2$ のとき $t:2\to\frac12$。
-2. $I=\int_2^{1/2}t\sin\left(\frac1t-t\right)\left(-\frac{dt}{t^2}\right)=\int_{1/2}^2\frac1t\sin\left(\frac1t-t\right)dt=-I$。
-3. よって $I=0$。
+1. (1) 積の微分で $n\cos^{n-1}x(\cos x\cos nx-\sin x\sin nx)=n\cos^{n-1}x\cos(n+1)x$。もう一方も同様。
+2. (2) 積和の公式 $\cos(n+1)x+\cos(n-1)x=2\cos x\cos nx$ に $\cos^{n-1}x$ をかけて積分すると $\int_0^{\pi/2}\cos^{n-1}x\cos(n+1)x\,dx+I_{n-1}=2I_n$。左の積分は (1) より $\frac1n\left[\cos^nx\sin nx\right]_0^{\pi/2}=0$。よって $I_n=\frac12I_{n-1}$、$I_0=\frac\pi2$。
+3. (3) 同様に $\sin(n+1)x+\sin(n-1)x=2\cos x\sin nx$ から $\int_0^{\pi/2}\cos^{n-1}x\sin(n+1)x\,dx+J_{n-1}=2J_n$。左の積分は $-\frac1n\left[\cos^nx\cos nx\right]_0^{\pi/2}=\frac1n$。よって $2^nJ_n=2^{n-1}J_{n-1}+\frac{2^{n-1}}n$、$J_0=0$。
 
-**ねらい** 積分区間 $\left[\frac12,2\right]$ が $x\to\frac1x$ で自分自身に移ることに気づくか。$x-\frac1x$ は符号が変わるので、奇関数の積分と同じしくみで 0 になる。
+**ねらい** $\cos^nx$ と $\cos nx$ の積という一見扱いにくい積分が、**微分すると次数が 1 つずれた形になる**ことから漸化式が作れる。(1) の計算が (2)(3) の両方の鍵になる構成で、東大の「誘導の意味を読む」力を問う。
 
-## 問題7
+## 第4問
 
-**答え** $\dfrac{2\pi}{\sqrt3}$
-
-**骨子**
-1. $\cos(2\pi-x)=\cos x$ なので、与式 $=2\int_0^\pi\frac{dx}{2+\cos x}$。さらに $x=\pi-t$ で $[\frac\pi2,\pi]$ の部分を移すと、$\int_0^\pi=\int_0^{\pi/2}\left(\frac1{2+\cos x}+\frac1{2-\cos x}\right)dx$。
-2. $t=\tan\frac x2$($0\le t\le1$)とおくと $\cos x=\frac{1-t^2}{1+t^2}$、$dx=\frac{2\,dt}{1+t^2}$ で、$\int_0^{\pi/2}\frac{dx}{2+\cos x}=\int_0^1\frac{2\,dt}{3+t^2}$、$\int_0^{\pi/2}\frac{dx}{2-\cos x}=\int_0^1\frac{2\,dt}{1+3t^2}$。
-3. $t=\sqrt3\tan\theta$、$t=\frac1{\sqrt3}\tan\theta$ でそれぞれ $\frac{\pi}{3\sqrt3}$、$\frac{2\pi}{3\sqrt3}$。合計 $\frac\pi{\sqrt3}$ を 2 倍する。
-
-**ねらい** $t=\tan\frac x2$ をいきなり $[0,2\pi]$ に使うと、$x=\pi$ で $t$ が定義できず誤る。**置換が使える区間に区切ってから置換する**のが本質。区切り方を工夫すると、変換後の積分区間が $[0,1]$ に収まる。
-
-## 問題8
-
-**答え** $\dfrac\pi8\log2$
+**答え** (1) $J_n=J_{n-1}-\dfrac1{e\cdot n!}$ (2)(3) 下の骨子
 
 **骨子**
-1. $x=\tan\theta$ とおくと、与式 $=\int_0^{\pi/4}\log(1+\tan\theta)\,d\theta$。
-2. $\theta=\frac\pi4-u$ とおくと $1+\tan\left(\frac\pi4-u\right)=1+\frac{1-\tan u}{1+\tan u}=\frac2{1+\tan u}$。
-3. よって $I=\int_0^{\pi/4}\{\log2-\log(1+\tan u)\}du=\frac\pi4\log2-I$。$I=\frac\pi8\log2$。
+1. (1) 部分積分: $\int_0^1x^ne^{-x}dx=\left[-x^ne^{-x}\right]_0^1+n\int_0^1x^{n-1}e^{-x}dx=-\frac1e+n\int_0^1x^{n-1}e^{-x}dx$。両辺を $n!$ で割る。
+2. (2) $J_0=1-\frac1e$ と (1) から $J_n=1-\frac1e\sum_{k=0}^n\frac1{k!}$。$e$ 倍する。$0<x^ne^{-x}\le x^n$($0<x\le1$)なので $0<J_n<\frac1{(n+1)!}$。
+3. (3) $e=\frac pq$($p,q$ は正の整数、$q\ge2$ としてよい)と仮定し、$n=q$ として (2) を $q!$ 倍する。$q!\left(e-\sum_{k=0}^q\frac1{k!}\right)$ は整数だが、$0$ より大きく $\frac e{q+1}<1$ より小さい。矛盾。
 
-**ねらい** 原始関数は高校の範囲では求まらない。$x=\tan\theta$ で三角関数に直し、さらに「端から測り直す」置換で自分自身と組にする 2 段構え。問題1・2 の考え方の発展。
+**ねらい** 積分を「誤差の正確な表示」として使い、**誤差が正で小さすぎる**ことから矛盾を導く。計算より論理の組み立てが中心で、$q\ge2$ としてよい理由($e$ は整数でない、$2<e<3$)まで書けるかで差がつく。
 
-## 問題9
+## 第5問
 
-**答え** (1) $I_n=\dfrac{2n}{2n+1}I_{n-1}$ (2) 下の骨子
-
-**骨子**
-1. (1) $I_n=\int_0^1(1-x^2)^n\cdot1\,dx$ を部分積分すると $I_n=\left[x(1-x^2)^n\right]_0^1+2n\int_0^1x^2(1-x^2)^{n-1}dx$。$x^2=1-(1-x^2)$ と書いて $I_n=2n(I_{n-1}-I_n)$。
-2. (2) 左辺は、$(1-x^2)^n$ を二項定理で展開して積分したもの $\sum_k(-1)^k{}_n\mathrm C_k\int_0^1x^{2k}dx$ に等しい。つまり左辺 $=I_n$。
-3. 右辺: (1) をくり返して $I_n=\frac{2n}{2n+1}\cdot\frac{2n-2}{2n-1}\cdots\frac23\cdot I_0=\frac{(2\cdot4\cdots2n)^2}{(2n+1)!}=\frac{(2^nn!)^2}{(2n+1)!}$。
-
-**ねらい** 同じ積分を **2 通りに計算して等式を作る**。直接示すのが難しい二項係数の和が、積分を経由すると一瞬で示せる。
-
-## 問題10
-
-**答え** (1) 下の骨子 (2) $\sqrt{\dfrac\pi2}$
+**答え** (1)(2) 下の骨子 (3) $-\dfrac14$
 
 **骨子**
-1. (1) 部分積分で $J_n=\frac{n-1}nJ_{n-2}$($n\ge2$)。よって $nJ_nJ_{n-1}=(n-1)J_{n-1}J_{n-2}$ で、$nJ_nJ_{n-1}$ は $n$ によらない。$n=1$ で $1\cdot J_1J_0=1\cdot\frac\pi2$。
-2. (2) $0\le\sin x\le1$ なので $J_{n+1}\le J_n\le J_{n-1}$。(1) から $J_nJ_{n+1}=\frac\pi{2(n+1)}$、$J_nJ_{n-1}=\frac\pi{2n}$。
-3. よって $\frac\pi{2(n+1)}\le J_n^2\le\frac\pi{2n}$。$nJ_n^2$ は $\frac\pi2$ にはさまれ、$\sqrt nJ_n\to\sqrt{\frac\pi2}$。
+1. (1) $y=\frac1x$ は下に凸。区間の中点での接線はグラフの下、両端を結ぶ線分はグラフの上にあるので、積分は「中点の値 × 幅」$\frac{h}{a+\frac h2}$ 以上、「台形の面積」以下。
+2. (2) 左側: 台形の不等式を $a=n+k-1$、$h=1$($k=1,\dots,n$)で足すと $\log2\le\sum_{k=1}^n\frac12\left(\frac1{n+k-1}+\frac1{n+k}\right)=S_n+\frac1{4n}$。
+3. 右側: 中点の不等式を $a=n+k-\frac12$、$h=1$ で足すと $S_n\le\int_{n+\frac12}^{2n+\frac12}\frac{dx}x=\log\frac{4n+1}{2n+1}$。$\log2$ を引いて $n$ 倍する。
+4. (3) $n\log\frac{4n+1}{4n+2}=n\log\left(1-\frac1{4n+2}\right)\le-\frac n{4n+2}$($\log(1+t)\le t$)。両側が $-\frac14$ に近づく。
 
-**ねらい** 漸化式から「$n$ によらない量」を見つけ、単調性ではさむ。$J_n$ 自体は $n$ の偶奇で式が変わるが、2 つ並べた積は簡単になる、という発想が本質(ウォリスの公式)。
+**ねらい** 区分求積 $S_n\to\log2$ の「近づく速さ」を求める。**凸関数の積分を台形と中点の長方形ではさむ**という図形的な発想で、誤差の主要部分 $-\frac1{4n}$ が両側からぴったり出る。(1) の不等式の向き(どちらが大きいか)を図で確かめてから進めること。
