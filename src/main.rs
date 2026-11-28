@@ -6,7 +6,7 @@ use pulldown_cmark::{html, Event, Options, Parser};
 use serde::Deserialize;
 use std::{fs, path::Path};
 
-const SITE_TITLE: &str = "国公立大 予想問題";
+const SITE_TITLE: &str = "挑む数学";
 
 #[derive(Deserialize)]
 struct Meta {
@@ -600,7 +600,7 @@ fn main() -> Result<(), String> {
 
     // トップ：教科選択
     let mut main = String::from(
-        "<h1>国公立大 予想問題</h1>\n<p>難しい問題に挑戦する体力と頭脳のある人のためのサイトです。<strong>受験</strong>では東京大学・京都大学 前期日程の数学（2027年度）の予想問題を、<strong>数学の演習</strong>では高校数学の範囲で解けて思考力を鍛える問題を、すべて解答・解説付きで無料公開しています。</p>\n",
+        "<h1>挑む数学 ― 入試予想問題と演習</h1>\n<p>難しい問題に挑戦する体力と頭脳のある人のためのサイトです。<strong>受験</strong>では東京大学・京都大学 前期日程の数学（2027年度）の予想問題を、<strong>数学の演習</strong>では高校数学の範囲で解けて思考力を鍛える問題を、すべて解答・解説付きで無料公開しています。</p>\n",
     );
     let mut cats: Vec<&str> = Vec::new();
     for s in &subjects {
