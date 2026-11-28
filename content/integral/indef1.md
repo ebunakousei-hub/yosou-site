@@ -1,82 +1,87 @@
 +++
-title = "不定積分 大問演習①（4題）"
+title = "不定積分 難問演習（6題）"
 level = "indefinite"
 order = 2
 +++
 
 ## 第1問（難）
 
-(1) $(x\sin x+\cos x)'$ と $(x\cos x-\sin x)'$ を求めよ。
+$0<x<\pi$ で、不定積分 $\displaystyle\int\frac{dx}{\sin x\,(2+\cos x)}$ を求めよ。
 
-(2) 不定積分 $\displaystyle\int\frac{x^2}{(x\sin x+\cos x)^2}\,dx$ を求めよ。
+## 第2問（難）
 
-(3) 不定積分 $\displaystyle\int\frac{x^2}{(x\cos x-\sin x)^2}\,dx$ を求めよ。
+$0<x<\dfrac\pi2$ で、不定積分 $\displaystyle\int\left(\sqrt{\tan x}-\frac1{\sqrt{\tan x}}\right)dx$ を求めよ。
 
-## 第2問（やや難）
+## 第3問（難）
 
-(1) $\left\{\log\left(x+\sqrt{x^2+1}\right)\right\}'$ を求めよ。
+$x>0$ で、不定積分 $\displaystyle\int\frac{dx}{x\sqrt{x^2+x+1}}$ を求めよ。
 
-(2) 不定積分 $\displaystyle\int\sqrt{x^2+1}\,dx$ を求めよ。
+## 第4問（最難）
 
-(3) $x>0$ で、不定積分 $\displaystyle\int\frac{\sqrt{x^2+1}}x\,dx$ を求めよ。
+$x>1$ で、不定積分 $\displaystyle\int\frac{x^2+1}{(x^2-1)\sqrt{x^4+1}}\,dx$ を求めよ。
 
-## 第3問（やや難）
+## 第5問（難）
 
-(1) 不定積分 $\displaystyle\int\frac{x^2-1}{x^4+1}\,dx$ を求めよ。
+不定積分 $\displaystyle\int\frac{x^4-1}{x^6+1}\,dx$ を求めよ。
 
-(2) 不定積分 $\displaystyle\int\frac{x^2-1}{x^4+x^2+1}\,dx$ を求めよ。
+## 第6問（最難）
 
-(3) $a<2$ を満たす実数 $a$ に対し、不定積分 $\displaystyle\int\frac{x^2-1}{x^4+ax^2+1}\,dx$ を求めよ。また、$a=2$ のときの不定積分も求めよ。
-
-## 第4問（やや難）
-
-$\sin x+\cos x>0$ となる範囲で考える。
-
-(1) 不定積分 $\displaystyle\int\frac{\sin x}{\sin x+\cos x}\,dx$ を求めよ。
-
-(2) 不定積分 $\displaystyle\int\frac{\sin^3x}{\sin x+\cos x}\,dx$ を求めよ。
-
-(3) 定積分 $\displaystyle\int_0^{\frac\pi2}\frac{\sin^3x}{\sin x+\cos x}\,dx$ を、(2) を使う方法と使わない方法の 2 通りで求めよ。
+$-1<x<1$ で、不定積分 $\displaystyle\int\frac{x^2+20}{(x\sin x+5\cos x)^2}\,dx$ を求めよ。
 
 @@解答@@
 
 ## 第1問
 
-**答え** (1) $x\cos x$、$-x\sin x$ (2) $\dfrac{\sin x-x\cos x}{x\sin x+\cos x}+C$ (3) $\dfrac{x\sin x+\cos x}{x\cos x-\sin x}+C$
+**答え** $\dfrac16\log(1-\cos x)-\dfrac12\log(1+\cos x)+\dfrac13\log(2+\cos x)+C$
 
 **骨子**
-1. (2) (1) の $x\cos x$ を作るように分ける: $\frac{x^2}{(x\sin x+\cos x)^2}=\frac x{\cos x}\cdot\frac{x\cos x}{(x\sin x+\cos x)^2}$。後ろの原始関数は $-\frac1{x\sin x+\cos x}$。
-2. $\left(\frac x{\cos x}\right)'=\frac{\cos x+x\sin x}{\cos^2x}$ なので、部分積分すると $-\frac x{\cos x(x\sin x+\cos x)}+\int\frac{dx}{\cos^2x}$。$\tan x$ と通分して答え。
-3. (3) 同様に $\frac{x^2}{(x\cos x-\sin x)^2}=\frac x{\sin x}\cdot\frac{x\sin x}{(x\cos x-\sin x)^2}$。後ろの原始関数は $\frac1{x\cos x-\sin x}$。$\left(\frac x{\sin x}\right)'=\frac{\sin x-x\cos x}{\sin^2x}$ で部分積分すると $\frac x{\sin x(x\cos x-\sin x)}+\int\frac{dx}{\sin^2x}=\frac x{\sin x(x\cos x-\sin x)}-\frac{\cos x}{\sin x}$。通分して答え。
-
+1. 分母分子に $\sin x$ をかけて $\frac{\sin x}{(1-\cos^2x)(2+\cos x)}$。$u=\cos x$ とおくと $du=-\sin x\,dx$ で、$-\int\frac{du}{(1-u)(1+u)(2+u)}$。
+2. 部分分数分解: $\frac1{(1-u)(1+u)(2+u)}=\frac{1/6}{1-u}+\frac{1/2}{1+u}-\frac{1/3}{2+u}$(各因数が 0 になる $u$ を代入して係数を出す)。
+3. $-\int\frac{du}{1-u}=\log(1-u)$、$-\int\frac{du}{1+u}=-\log(1+u)$、$\int\frac{du}{2+u}=\log(2+u)$ をまとめる。$0<x<\pi$ で $1\pm\cos x>0$。
 
 ## 第2問
 
-**答え** (1) $\dfrac1{\sqrt{x^2+1}}$ (2) $\dfrac12\left\{x\sqrt{x^2+1}+\log\left(x+\sqrt{x^2+1}\right)\right\}+C$ (3) $\sqrt{x^2+1}-\log\dfrac{1+\sqrt{x^2+1}}x+C$
+**答え** $-\sqrt2\log\left(\sin x+\cos x+\sqrt{\sin2x}\right)+C$
 
 **骨子**
-1. (1) $\frac{1+\frac x{\sqrt{x^2+1}}}{x+\sqrt{x^2+1}}=\frac1{\sqrt{x^2+1}}$。
-2. (2) 部分積分 $I=x\sqrt{x^2+1}-\int\frac{x^2}{\sqrt{x^2+1}}dx$。$\frac{x^2}{\sqrt{x^2+1}}=\sqrt{x^2+1}-\frac1{\sqrt{x^2+1}}$ なので $I=x\sqrt{x^2+1}-I+\log\left(x+\sqrt{x^2+1}\right)$。
-3. (3) $\frac{\sqrt{x^2+1}}x=\frac{x^2+1}{x\sqrt{x^2+1}}=\frac x{\sqrt{x^2+1}}+\frac1{x\sqrt{x^2+1}}$。前は $\sqrt{x^2+1}$。後ろは $u=\sqrt{x^2+1}$($x\,dx=u\,du$)とおくと $\int\frac{du}{u^2-1}=\frac12\log\frac{u-1}{u+1}$。$\frac{u-1}{u+1}=\frac{(u-1)^2}{u^2-1}=\left(\frac{u-1}x\right)^2$ なので $\log\frac{\sqrt{x^2+1}-1}x=-\log\frac{1+\sqrt{x^2+1}}x$。
-
+1. $\sqrt{\tan x}-\frac1{\sqrt{\tan x}}=\frac{\sin x-\cos x}{\sqrt{\sin x\cos x}}$。
+2. $u=\sin x+\cos x$ とおくと $du=(\cos x-\sin x)dx$、$\sin x\cos x=\frac{u^2-1}2$、$1<u\le\sqrt2$。与式 $=-\sqrt2\int\frac{du}{\sqrt{u^2-1}}$。
+3. $\left\{\log\left(u+\sqrt{u^2-1}\right)\right\}'=\frac1{\sqrt{u^2-1}}$。$\sqrt{u^2-1}=\sqrt{2\sin x\cos x}=\sqrt{\sin2x}$ に戻す。
 
 ## 第3問
 
-**答え** (1) $\dfrac1{2\sqrt2}\log\dfrac{x^2-\sqrt2x+1}{x^2+\sqrt2x+1}+C$ (2) $\dfrac12\log\dfrac{x^2-x+1}{x^2+x+1}+C$ (3) $a<2$ のとき $\dfrac1{2c}\log\dfrac{x^2-cx+1}{x^2+cx+1}+C$($c=\sqrt{2-a}$)、$a=2$ のとき $-\dfrac x{x^2+1}+C$
+**答え** $-\log\dfrac{x+2+2\sqrt{x^2+x+1}}x+C$
 
 **骨子**
-1. $x\ne0$ で分母分子を $x^2$ で割ると $\frac{1-\frac1{x^2}}{x^2+\frac1{x^2}+a}$。$t=x+\frac1x$ とおくと $dt=\left(1-\frac1{x^2}\right)dx$、$x^2+\frac1{x^2}=t^2-2$ なので $\int\frac{dt}{t^2-(2-a)}$。
-2. $a<2$ のとき $c=\sqrt{2-a}>0$ として $\frac1{t^2-c^2}=\frac1{2c}\left(\frac1{t-c}-\frac1{t+c}\right)$。$\frac{t-c}{t+c}=\frac{x^2-cx+1}{x^2+cx+1}$。(1) は $a=0$、(2) は $a=1$ の場合。
-3. $a=2$ のとき $\int\frac{dt}{t^2}=-\frac1t=-\frac x{x^2+1}$。
-4. $x=0$ を含む範囲でも、答えを微分すると被積分関数に一致することを確かめる($x^2\pm cx+1>0$ なので $\log$ の中は常に正)。
-
+1. $x=\frac1t$($t>0$)とおくと $dx=-\frac{dt}{t^2}$、$\sqrt{x^2+x+1}=\frac{\sqrt{t^2+t+1}}t$。与式 $=-\int\frac{dt}{\sqrt{t^2+t+1}}$。
+2. $t^2+t+1=\left(t+\frac12\right)^2+\frac34$。$\left\{\log\left(s+\sqrt{s^2+a}\right)\right\}'=\frac1{\sqrt{s^2+a}}$ を $s=t+\frac12$ で使うと $-\log\left(t+\frac12+\sqrt{t^2+t+1}\right)$。
+3. $t=\frac1x$ を戻すと $t+\frac12+\sqrt{t^2+t+1}=\frac{x+2+2\sqrt{x^2+x+1}}{2x}$。定数 $\log2$ は $C$ に含める。
 
 ## 第4問
 
-**答え** (1) $\dfrac12\left\{x-\log(\sin x+\cos x)\right\}+C$ (2) $\dfrac12\left\{x-\dfrac{\sin^2x}2-\dfrac{(\sin x+\cos x)^2}4-\dfrac12\log(\sin x+\cos x)\right\}+C$ (3) $\dfrac{\pi-1}4$
+**答え** $\dfrac1{2\sqrt2}\log\dfrac{\sqrt{x^4+1}-\sqrt2x}{\sqrt{x^4+1}+\sqrt2x}+C$
 
 **骨子**
-1. (1) 相棒 $\int\frac{\cos x}{\sin x+\cos x}dx$ と足すと $x$、引くと $\log(\sin x+\cos x)$(分子が分母の微分)。連立して解く。
-2. (2) 相棒 $\int\frac{\cos^3x}{\sin x+\cos x}dx$ と足すと $\int(\sin^2x-\sin x\cos x+\cos^2x)dx=x-\frac{\sin^2x}2$。引くと $\int\frac{(\cos x-\sin x)(1+\sin x\cos x)}{\sin x+\cos x}dx$。
-3. $u=\sin x+\cos x$ とおくと $du=(\cos x-\sin x)dx$、$\sin x\cos x=\frac{u^2-1}2$。後ろは $\int\frac{u^2+1}{2u}du=\frac{u^2}4+\frac12\log u$。連立して答え。
-4. (3) (2) を使うと、原始関数は $x=\frac\pi2$ で $\frac12\left(\frac\pi2-\frac12-\frac14\right)$、$x=0$ で $\frac12\left(-\frac14\right)$。差は $\frac{\pi-1}4$。使わない方法: $x\to\frac\pi2-x$ で $\sin^3$ と $\cos^3$ が入れかわるので、定積分は相棒と等しく、足した値 $\frac\pi2-\frac12$ の半分。
+1. $x>0$ なので $\sqrt{x^4+1}=x\sqrt{x^2+\frac1{x^2}}$。分母分子を $x^2$ で割ると $\frac{1+\frac1{x^2}}{\left(x-\frac1x\right)\sqrt{x^2+\frac1{x^2}}}$。
+2. $t=x-\frac1x$($x>1$ で $t>0$)とおくと $dt=\left(1+\frac1{x^2}\right)dx$、$x^2+\frac1{x^2}=t^2+2$。与式 $=\int\frac{dt}{t\sqrt{t^2+2}}$。
+3. $u=\sqrt{t^2+2}$ とおくと $u\,du=t\,dt$ なので $\int\frac{du}{u^2-2}=\frac1{2\sqrt2}\log\frac{u-\sqrt2}{u+\sqrt2}$。
+4. $u=\frac{\sqrt{x^4+1}}x$ を戻し、分母分子に $x$ をかける。
+
+## 第5問
+
+**答え** $\dfrac1{2\sqrt3}\log\dfrac{x^2-\sqrt3x+1}{x^2+\sqrt3x+1}+C$
+
+**骨子**
+1. $x^6+1=(x^2+1)(x^4-x^2+1)$、$x^4-1=(x^2+1)(x^2-1)$ なので、被積分関数 $=\frac{x^2-1}{x^4-x^2+1}$。
+2. $x\ne0$ で分母分子を $x^2$ で割り、$t=x+\frac1x$ とおくと $dt=\left(1-\frac1{x^2}\right)dx$、$x^2-1+\frac1{x^2}=t^2-3$。$\int\frac{dt}{t^2-3}=\frac1{2\sqrt3}\log\left|\frac{t-\sqrt3}{t+\sqrt3}\right|$。
+3. $\frac{t-\sqrt3}{t+\sqrt3}=\frac{x^2-\sqrt3x+1}{x^2+\sqrt3x+1}$(分母・分子とも常に正)。答えを微分すると $x=0$ を含めて被積分関数に一致する。
+
+## 第6問
+
+**答え** $\dfrac{5\sin x-x\cos x}{x\sin x+5\cos x}+C$
+
+**骨子**
+1. $D=x\sin x+5\cos x$ の相棒として $E=5\sin x-x\cos x$ を考える。$D'=x\cos x-4\sin x=-(E-\sin x)$、$E'=x\sin x+4\cos x=D-\cos x$。
+2. $\left(\frac ED\right)'=\frac{E'D-ED'}{D^2}=\frac{D^2+E^2-(D\cos x+E\sin x)}{D^2}$。
+3. $D^2+E^2=(x^2+25)(\sin^2x+\cos^2x)=x^2+25$、$D\cos x+E\sin x=5$。よって分子は $x^2+20$ で、$\frac ED$ が原始関数。
+4. 発見の筋道: $D$ と $E$ は $(x,5)$ と $(\sin x,\cos x)$ の内積と外積にあたり、$D^2+E^2=x^2+25$ が成り立つ。被積分関数の分子 $x^2+20$ が $x^2+25$ に近いことから、$\frac ED$ の形を予想する。
