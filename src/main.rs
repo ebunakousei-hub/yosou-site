@@ -108,8 +108,8 @@ fn parse_file(path: &Path) -> Result<Problem, String> {
         .split_once("\n+++")
         .ok_or_else(|| format!("{}: フロントマターが閉じられていません", path.display()))?;
     let meta: Meta = toml::from_str(front).map_err(|e| format!("{}: {e}", path.display()))?;
-    if meta.level != "easy" && meta.level != "hard" {
-        return Err(format!("{}: level は easy か hard", path.display()));
+    if !is_safe_slug(&meta.level) {
+        return Err(format!("{}: level は英数字/-/_ のみ", path.display()));
     }
     let slug = path
         .file_stem()
@@ -317,6 +317,43 @@ struct SubjectMeta {
     /// 構造化データの keywords
     #[serde(default)]
     tags: String,
+    /// トップページでの分類（"受験" / "数学の演習"）
+    #[serde(default = "default_category")]
+    category: String,
+    /// 一覧ページの区分（空なら「易化した場合」「難化した場合」）
+    #[serde(default)]
+    sections: Vec<Section>,
+}
+
+#[derive(Deserialize, Clone)]
+struct Section {
+    key: String,
+    label: String,
+    #[serde(default)]
+    desc: String,
+}
+
+fn default_category() -> String {
+    "受験".to_string()
+}
+
+impl SubjectMeta {
+    /// 入試の予想問題か（false なら演習）
+    fn is_exam(&self) -> bool {
+        self.category == "受験"
+    }
+    fn sections(&self) -> Vec<Section> {
+        if !self.sections.is_empty() {
+            return self.sections.clone();
+        }
+        [("easy", "全体的に易しくなった場合を想定"), ("hard", "全体的に難しくなった場合を想定")]
+            .iter()
+            .map(|(k, d)| Section { key: k.to_string(), label: level_label(k).to_string(), desc: d.to_string() })
+            .collect()
+    }
+    fn label(&self, level: &str) -> String {
+        self.sections().into_iter().find(|x| x.key == level).map(|x| x.label).unwrap_or_else(|| level_label(level).to_string())
+    }
 }
 
 struct Subject {
@@ -349,6 +386,10 @@ fn load_subjects(root: &Path) -> Result<Vec<Subject>, String> {
             if path.extension().and_then(|e| e.to_str()) == Some("md") {
                 problems.push(parse_file(&path)?);
             }
+        }
+        let keys: Vec<String> = meta.sections().into_iter().map(|x| x.key).collect();
+        if let Some(bad) = problems.iter().find(|p| !keys.contains(&p.meta.level)) {
+            return Err(format!("{}/{}: level \"{}\" は教科の区分（{}）にない", slug, bad.slug, bad.meta.level, keys.join(", ")));
         }
         problems.sort_by(|a, b| (a.meta.order, &a.slug).cmp(&(b.meta.order, &b.slug)));
         subjects.push(Subject { slug, meta, problems });
@@ -388,8 +429,10 @@ fn main() -> Result<(), String> {
             } else {
                 format!("<p class=\"note\">{}</p>\n", esc(&p.meta.note))
             };
-            let tag = format!("<span class=\"tag {}\">{}</span>", p.meta.level, level_label(&p.meta.level));
+            let tag = format!("<span class=\"tag {}\">{}</span>", p.meta.level, esc(&s.meta.label(&p.meta.level)));
             let kw = if s.meta.keyword.is_empty() { s.meta.name.clone() } else { s.meta.keyword.clone() };
+            // 入試の予想問題か演習かで、タイトル・説明の言い方を変える
+            let (kind, back) = if s.meta.is_exam() { ("予想問題", "予想問題の一覧へ".to_string()) } else { ("", format!("{}の一覧へ", s.meta.name)) };
             if p.lastmod > site_last {
                 site_last = p.lastmod.clone();
             }
@@ -404,7 +447,7 @@ fn main() -> Result<(), String> {
                 .unwrap_or_default();
             let ans_link = if has_ans {
                 format!(
-                    "\n<p class=\"answer-link\"><a href=\"{}-answer.html\">解答・解説を見る →</a></p>\n<p class=\"note\"><a href=\"index.html\">予想問題の一覧へ</a>{sib_link}</p>",
+                    "\n<p class=\"answer-link\"><a href=\"{}-answer.html\">解答・解説を見る →</a></p>\n<p class=\"note\"><a href=\"index.html\">{back}</a>{sib_link}</p>",
                     p.slug
                 )
             } else {
@@ -418,13 +461,15 @@ fn main() -> Result<(), String> {
             let path = format!("{}/{}.html", s.slug, p.slug);
             let mut crumbs = subject_crumbs.clone();
             crumbs.push((p.meta.title.clone(), path.clone()));
-            let axis = axis_of(&p.meta.note).map(|a| format!("この年の軸は「{a}」。")).unwrap_or_default();
+            let axis = axis_of(&p.meta.note)
+                .map(|a| if s.meta.is_exam() { format!("この年の軸は「{a}」。") } else { format!("テーマは「{a}」。") })
+                .unwrap_or_default();
             let lv = level_summary(&p.body_html);
             let seo = Seo {
                 desc: format!(
-                    "{kw}の予想問題「{}」（{}）。{axis}全{}問{}。{}無料で公開しています。",
+                    "{kw}の{kind}「{}」（{}）。{axis}全{}問{}。{}無料で公開しています。",
                     p.meta.title,
-                    level_label(&p.meta.level),
+                    s.meta.label(&p.meta.level),
                     qcount,
                     if lv.is_empty() { String::new() } else { format!("（{lv}）") },
                     if has_ans { "解答・解説付きで、" } else { "" }
@@ -436,13 +481,13 @@ fn main() -> Result<(), String> {
                 items: Vec::new(),
                 keywords: s.meta.tags.clone(),
             };
-            let html = page(&format!("{}｜{}予想問題", p.meta.title, kw), "../", &main, &seo);
+            let html = page(&format!("{}｜{}{kind}", p.meta.title, kw), "../", &main, &seo);
             fs::write(dist.join(&path), html).map_err(|e| e.to_string())?;
             urls.push((path, p.lastmod.clone()));
 
             if has_ans {
                 let main = format!(
-                    "<p class=\"crumb\"><a href=\"../index.html\">トップ</a> / <a href=\"index.html\">{sname}</a> / {tag}</p>\n<h1>{t} 解答・解説</h1>\n{note}<article>{b}</article>\n<p class=\"answer-link\"><a href=\"{slug}.html\">← 問題に戻る</a></p>\n<p class=\"note\"><a href=\"index.html\">予想問題の一覧へ</a></p>",
+                    "<p class=\"crumb\"><a href=\"../index.html\">トップ</a> / <a href=\"index.html\">{sname}</a> / {tag}</p>\n<h1>{t} 解答・解説</h1>\n{note}<article>{b}</article>\n<p class=\"answer-link\"><a href=\"{slug}.html\">← 問題に戻る</a></p>\n<p class=\"note\"><a href=\"index.html\">{back}</a></p>",
                     t = esc(&p.meta.title),
                     b = p.answer_html,
                     slug = p.slug,
@@ -452,7 +497,7 @@ fn main() -> Result<(), String> {
                 crumbs.push((format!("{} 解答・解説", p.meta.title), apath.clone()));
                 let seo = Seo {
                     desc: format!(
-                        "{kw}の予想問題「{}」の解答・解説。全{}問について、答え・答案の筋道（骨子）・ねらいを無料で公開しています。",
+                        "{kw}の{kind}「{}」の解答・解説。全{}問について、答え・答案の筋道（骨子）・ねらいを無料で公開しています。",
                         p.meta.title, qcount
                     ),
                     path: apath.clone(),
@@ -462,7 +507,7 @@ fn main() -> Result<(), String> {
                     items: Vec::new(),
                     keywords: s.meta.tags.clone(),
                 };
-                let html = page(&format!("{} 解答・解説｜{}予想問題", p.meta.title, kw), "../", &main, &seo);
+                let html = page(&format!("{} 解答・解説｜{}{kind}", p.meta.title, kw), "../", &main, &seo);
                 fs::write(dist.join(&apath), html).map_err(|e| e.to_string())?;
                 urls.push((apath, p.lastmod.clone()));
             }
@@ -471,15 +516,18 @@ fn main() -> Result<(), String> {
         // 教科ページ（易化 / 難化）
         let kw = if s.meta.keyword.is_empty() { s.meta.name.clone() } else { s.meta.keyword.clone() };
         let mut main = format!(
-            "<p class=\"crumb\"><a href=\"../index.html\">トップ</a> / {sname}</p>\n<h1>{} 予想問題</h1>\n{}",
+            "<p class=\"crumb\"><a href=\"../index.html\">トップ</a> / {sname}</p>\n<h1>{}{}</h1>\n{}",
             esc(&kw),
+            if s.meta.is_exam() { " 予想問題" } else { "" },
             if s.meta.intro.is_empty() { String::new() } else { format!("<div class=\"intro\">{}</div>\n", render_md(&s.meta.intro)) }
         );
         let mut list_items: Vec<(String, String)> = Vec::new();
-        for (lv, desc) in [("easy", "全体的に易しくなった場合を想定"), ("hard", "全体的に難しくなった場合を想定")] {
+        for sec in s.meta.sections() {
+            let lv = sec.key.as_str();
             main.push_str(&format!(
-                "<section><h2><span class=\"tag {lv}\">{}</span></h2>\n<p class=\"desc\">{desc}</p>\n<ul class=\"sets\">\n",
-                level_label(lv)
+                "<section><h2><span class=\"tag {lv}\">{}</span></h2>\n{}<ul class=\"sets\">\n",
+                esc(&sec.label),
+                if sec.desc.is_empty() { String::new() } else { format!("<p class=\"desc\">{}</p>\n", esc(&sec.desc)) }
             ));
             // セット（例: 易化年①）ごとに1行にまとめる。同じセットの文科・理科は slug の末尾（-arts / -sci）以外が共通。
             let mut rows: Vec<(String, String, Vec<(String, String)>, String)> = Vec::new(); // (key, セット名, [(科, slug)], 軸)
@@ -489,7 +537,7 @@ fn main() -> Result<(), String> {
                 let split = [" 文科", " 理科", " 文系", " 理系"].iter().find_map(|c| title.find(c));
                 let (set_name, course) = match split {
                     Some(i) => (&title[..i], &title[i + 1..]),
-                    None => (title, title),
+                    None => (title, "問題を解く"),
                 };
                 list_items.push((p.meta.title.clone(), format!("{}/{}.html", s.slug, p.slug)));
                 let axis = axis_of(&p.meta.note).unwrap_or("").to_string();
@@ -499,7 +547,7 @@ fn main() -> Result<(), String> {
                 }
             }
             for (_, set_name, courses, axis) in &rows {
-                let axis_html = if axis.is_empty() { String::new() } else { format!("<small class=\"axis\">軸: {}</small>", esc(axis)) };
+                let axis_html = if axis.is_empty() { String::new() } else { format!("<small class=\"axis\">{}: {}</small>", if s.meta.is_exam() { "軸" } else { "テーマ" }, esc(axis)) };
                 main.push_str(&format!("<li class=\"setrow\"><span class=\"setname\">{}{axis_html}</span><span class=\"setlinks\">", esc(set_name)));
                 for (course, slug) in courses {
                     main.push_str(&format!("<a href=\"{}.html\">{}</a>", slug, esc(course)));
@@ -513,13 +561,28 @@ fn main() -> Result<(), String> {
         }
         let spath = format!("{}/", s.slug);
         let nsets = list_items.len();
-        let seo = Seo {
-            desc: format!(
+        let sdesc = if s.meta.is_exam() {
+            format!(
                 "{}。易化した場合・難化した場合の予想問題{}本を、{}ごとに解答・解説付きで無料公開。",
                 s.meta.desc,
                 nsets,
                 if s.meta.courses.is_empty() { "文理" } else { &s.meta.courses }
-            ),
+            )
+        } else {
+            format!("{}。全{}セットを、答え・筋道（骨子）・ねらいの解説付きで無料公開。", s.meta.desc, nsets)
+        };
+        let stitle = if s.meta.is_exam() {
+            format!(
+                "{} 予想問題一覧（易化・難化／{}）| {}",
+                kw,
+                if s.meta.course_pair.is_empty() { "文理" } else { &s.meta.course_pair },
+                SITE_TITLE
+            )
+        } else {
+            format!("{} 問題一覧（解答・解説付き）| {}", kw, SITE_TITLE)
+        };
+        let seo = Seo {
+            desc: sdesc,
             path: spath.clone(),
             crumbs: subject_crumbs.clone(),
             resource: false,
@@ -529,17 +592,7 @@ fn main() -> Result<(), String> {
         };
         fs::write(
             sdir.join("index.html"),
-            page(
-                &format!(
-                    "{} 予想問題一覧（易化・難化／{}）| {}",
-                    kw,
-                    if s.meta.course_pair.is_empty() { "文理" } else { &s.meta.course_pair },
-                    SITE_TITLE
-                ),
-                "../",
-                &main,
-                &seo,
-            ),
+            page(&stitle, "../", &main, &seo),
         )
         .map_err(|e| e.to_string())?;
         urls.push((spath, site_last.clone()));
@@ -547,22 +600,33 @@ fn main() -> Result<(), String> {
 
     // トップ：教科選択
     let mut main = String::from(
-        "<h1>国公立大 予想問題</h1>\n<p>国公立大学の入試予想問題を無料で公開しています。現在は<strong>東京大学・京都大学 前期日程の数学（2027年度）</strong>の予想問題を、易化した場合・難化した場合に分けて、文系・理系それぞれ解答・解説付きで掲載しています。各大学の過去問を分析し、2027年度の出題範囲に合わせて作成しています。</p>\n<ul class=\"subjects\">\n",
+        "<h1>国公立大 予想問題</h1>\n<p>難しい問題に挑戦する体力と頭脳のある人のためのサイトです。<strong>受験</strong>では東京大学・京都大学 前期日程の数学（2027年度）の予想問題を、<strong>数学の演習</strong>では高校数学の範囲で解けて思考力を鍛える問題を、すべて解答・解説付きで無料公開しています。</p>\n",
     );
+    let mut cats: Vec<&str> = Vec::new();
     for s in &subjects {
-        main.push_str(&format!(
-            "<li><a href=\"{slug}/index.html\"><strong>{n}</strong><span>{d}</span></a></li>\n",
-            slug = s.slug,
-            n = esc(&s.meta.name),
-            d = esc(&s.meta.desc)
-        ));
+        if !cats.contains(&s.meta.category.as_str()) {
+            cats.push(&s.meta.category);
+        }
     }
-    main.push_str("</ul>\n");
-    let subj_names: Vec<&str> = subjects.iter().map(|s| s.meta.name.as_str()).collect();
+    for c in &cats {
+        main.push_str(&format!("<section class=\"category\"><h2>{}</h2>\n<ul class=\"subjects\">\n", esc(c)));
+        for s in subjects.iter().filter(|s| s.meta.category == *c) {
+            main.push_str(&format!(
+                "<li><a href=\"{slug}/index.html\"><strong>{n}</strong><span>{d}</span></a></li>\n",
+                slug = s.slug,
+                n = esc(&s.meta.name),
+                d = esc(&s.meta.desc)
+            ));
+        }
+        main.push_str("</ul></section>\n");
+    }
+    let subj_names: Vec<&str> = subjects.iter().filter(|s| s.meta.is_exam()).map(|s| s.meta.name.as_str()).collect();
+    let prac_names: Vec<&str> = subjects.iter().filter(|s| !s.meta.is_exam()).map(|s| s.meta.name.as_str()).collect();
     let seo = Seo {
         desc: format!(
-            "国公立大学の入試予想問題を無料公開。{}の2027年度予想問題を、易化・難化の両方、文系・理系ごとに解答・解説付きで掲載。",
-            subj_names.join("・")
+            "難しい問題に挑戦したい人のための数学の問題集。{}の2027年度予想問題（易化・難化、文系・理系）{}を、解答・解説付きで無料公開。",
+            subj_names.join("・"),
+            if prac_names.is_empty() { String::new() } else { format!("と、{}", prac_names.join("・")) }
         ),
         path: String::new(),
         crumbs: Vec::new(),
@@ -573,7 +637,17 @@ fn main() -> Result<(), String> {
     };
     fs::write(
         dist.join("index.html"),
-        page(&format!("{} 2027年度 予想問題 無料公開（解答・解説付き）| {}", subj_names.join("・"), SITE_TITLE), "", &main, &seo),
+        page(
+            &format!(
+                "{} 2027年度 予想問題{} 無料公開（解答・解説付き）| {}",
+                subj_names.join("・"),
+                if prac_names.is_empty() { String::new() } else { format!("・{}", prac_names.join("・")) },
+                SITE_TITLE
+            ),
+            "",
+            &main,
+            &seo,
+        ),
     )
     .map_err(|e| e.to_string())?;
 

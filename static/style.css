@@ -32,3 +32,5 @@ ul.sets { list-style:none; padding:0; margin:.4rem 0 0; }
 article table { border-collapse:collapse; width:100%; margin:.6rem 0 1.2rem; font-size:.9rem; }
 article th, article td { border:1px solid #d5dbe5; padding:.35rem .55rem; text-align:left; vertical-align:top; }
 article th { background:#eef2f8; font-weight:700; white-space:nowrap; }
+.tag:not(.easy):not(.hard) { background:var(--accent); }
+section.category > h2 { font-size:1.1rem; margin:1.6rem 0 .6rem; padding-left:.6rem; border-left:4px solid var(--accent); }
